@@ -7,6 +7,8 @@ vite dev
 
 Check the page on http://localhost:5173/
 
+This app fetches a list of users using Github API and renders them on the screen. If the user scrolls to the bottom, more data is fetched and the list gets updated with this new data.
+
 ### DataList
 
 Dummy UI component that renders the data and has infinite scroll. The LOADING text at the bottom of this component has been used as a marker to fetch more data when it appears on screen, enabling infinite scrolling.
@@ -26,8 +28,11 @@ Hook containing the logical part of the `DataList` component.
 
 ### TODO
 
-- If there is an error and the API doesn't return data, the current code is still updating the page number. We need to validate the API response schema and then only proceed if it is valid. Incase of an error, we can show an error message and show a button to the user that will allow them to retry.
-  Example: This can happen if the user gets rate limited for hte APIs.
+If there is an error and the API doesn't return data, the current code is still updating the page number. We need to validate the API response schema and then only proceed if it is valid. Incase of an error, we can show an error message and show a button to the user that will allow them to retry.
+
+Example: This can happen if the user gets rate limited for hte APIs.
+
+This can also happen if we reach the end of the list. In this case an 'end of data' message or something similar can be shown.
 
 ### Simulate fresh start
 
