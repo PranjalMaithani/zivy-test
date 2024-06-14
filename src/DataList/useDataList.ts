@@ -43,6 +43,7 @@ const useDataList = (): UseDataListT => {
       return;
     }
 
+    // if page number is not 1 initially, that means we already have initial data from local storage. No need to fetch in that case
     if (pageNumber === 1) {
       fetchList();
     }
