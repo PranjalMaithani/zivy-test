@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 
 const useDataList = ({ pageNumber }) => {
-  const [list, setList] = useState([]);
+  const [list, setList] = useState(() => {
+    //TODO: check for null scenario on localStorage
+    const localList = JSON.parse(localStorage.getItem('githubList')) || [];
+    console.log('local list = ', localList);
+    return localList;
+  });
   const [loading, setLoading] = useState(false);
 
   const fetchUrl = `https://api.github.com/orgs/mozilla/members?page=${pageNumber}`;
@@ -16,8 +21,11 @@ const useDataList = ({ pageNumber }) => {
       });
       const listData = await listResponse.json();
       console.log('listData ', listData);
-      const userNames = listData.map(user => user.login)
-      setList(prev => [...prev, ...userNames])
+      const userNames = listData.map(user => user.login);
+      const updatedList = [...list, ...userNames];
+      setList(updatedList);
+      localStorage.setItem('githubPageNumber', pageNumber);
+      localStorage.setItem('githubList', JSON.stringify(updatedList));
       setLoading(false);
     }
 

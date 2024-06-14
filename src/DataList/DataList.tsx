@@ -21,7 +21,11 @@ set loading to false
 */
 
 const DataList = () => {
-  const [pageNumber, setPageNumber] = useState(1);
+  const [pageNumber, setPageNumber] = useState(() => {
+    const localPageNumber = localStorage.getItem('githubPageNumber') || 1
+    console.log('local page number = ', localPageNumber);
+    return localPageNumber;
+  });
   const {list, loading} = useDataList({pageNumber});
 
   const updatePageNumber = () => {
