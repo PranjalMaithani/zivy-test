@@ -1,18 +1,17 @@
 import { useEffect, useState } from "react";
 import { useIntersectionObserver } from "usehooks-ts";
+import { GithubUserListData, UseDataListT } from "./types";
 
-const useDataList = () => {
+const useDataList = (): UseDataListT => {
   const { isIntersecting, ref: infiniteScrollRef } = useIntersectionObserver();
   const [pageNumber, setPageNumber] = useState(() => {
     const localPageNumber = Number(localStorage.getItem('githubPageNumber')) || 1
-    console.log('local page number = ', localPageNumber);
     return localPageNumber;
   });
 
   const [list, setList] = useState(() => {
-    const localList = JSON.parse(localStorage.getItem('githubList')) || [];
-    console.log('local list = ', localList);
-    return localList;
+    const localList = localStorage.getItem('githubList');
+    return localList ? JSON.parse(localList) : [];
   });
   const [loading, setLoading] = useState(false);
 
@@ -26,14 +25,14 @@ const useDataList = () => {
         // 'Authorization': `Bearer tokenHere` //got rate limited, had to use token
       }
     });
-    const listData = await listResponse.json();
-    console.log('listData ', listData);
+    const listData: GithubUserListData = await listResponse.json();
     const userNames = listData.map(user => user.login);
     const updatedList = [...list, ...userNames];
     const updatedPageNumber = pageNumber + 1;
+    //TODO: in case of an error (like rate limiting) the API returns nothing. In this case the page number shouldn't be updated. A button to retry can be shown instead maybe
     setList(updatedList);
     setPageNumber(updatedPageNumber);
-    localStorage.setItem('githubPageNumber', updatedPageNumber);
+    localStorage.setItem('githubPageNumber', `${updatedPageNumber}`);
     localStorage.setItem('githubList', JSON.stringify(updatedList));
     setLoading(false);
   }
