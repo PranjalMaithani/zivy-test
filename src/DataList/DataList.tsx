@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import useDataList from "./useDataList";
 import { useIntersectionObserver } from "usehooks-ts";
 
-const Footer = ({onScreenCallback, loading = false}) => {
+const Footer = ({onScreenCallback, loading}) => {
   const {isIntersecting, ref} = useIntersectionObserver();
 
   useEffect(() => {
@@ -22,7 +22,7 @@ set loading to false
 
 const DataList = () => {
   const [pageNumber, setPageNumber] = useState(() => {
-    const localPageNumber = localStorage.getItem('githubPageNumber') || 1
+    const localPageNumber = Number(localStorage.getItem('githubPageNumber')) || 1
     console.log('local page number = ', localPageNumber);
     return localPageNumber;
   });
@@ -34,7 +34,7 @@ const DataList = () => {
 
   return (<div>
   <ul>
-    {list.map((username) => <li>{username}</li>)}
+    {list.map((username) => <li key={username}>{username}</li>)}
   </ul>
   <Footer loading={loading} onScreenCallback={updatePageNumber}/>
   </div>)
